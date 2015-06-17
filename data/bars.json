@@ -22,8 +22,26 @@
   },
   "results": {
     "photo": "http://s5o.ru/storage/simple/ru/edt/50/31/28/85/rue708ddb2721.jpg",
+    "shareTxt": {
+      "ru": "",
+      "en": ""
+    },
+    "rightAnswersTxt": {
+      "ru": "",
+      "en": ""
+    },
     "texts": [{
-      "answers": 
+      "answers": 0,
+      "value": {
+        "ru": "Парень, ты ни о чем",
+        "en": ""
+      }
+    },{
+      "answers": 3,
+      "value": {
+        "ru": "Ну хотя бы так",
+        "en": ""
+      }
     }]
   },
   "questions": [{
@@ -44,13 +62,13 @@
         "ru": "Ответ на русском 2",
         "en": "English answer 2"
       }
-    },{
+    }, {
       "flag": false,
       "value": {
         "ru": "Ответ на русском 3",
         "en": "English answer 3"
       }
-    },{
+    }, {
       "flag": false,
       "value": {
         "ru": "Ответ на русском 4",
@@ -75,13 +93,13 @@
         "ru": "Ответ на русском 2-2",
         "en": "English answer 2-2"
       }
-    },{
+    }, {
       "flag": false,
       "value": {
         "ru": "Ответ на русском 2-3",
         "en": "English answer 2-3"
       }
-    },{
+    }, {
       "flag": false,
       "value": {
         "ru": "Ответ на русском 2-4",
