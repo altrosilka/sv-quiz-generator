@@ -1,0 +1,20 @@
+{
+	"node": true,
+	"browser": true,
+	"jasmine": true,
+	"eqeqeq": true,
+	"undef": true,
+	"strict": true,
+	"globals": {
+		"Parse": false,
+		"_": false,
+		"angular": false,
+		"module": false,
+		"Modernizr": false,
+		"inject": false,
+		"cordova": false,
+		"ionic": false,
+		"moment": false,
+		"$": false
+	}
+}

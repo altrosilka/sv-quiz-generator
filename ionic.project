@@ -1,0 +1,10 @@
+{
+  "name": "Locator",
+  "app_id": "",
+  "gulpStartupTasks": [
+    "watch"
+  ],
+  "watchPatterns": [
+    "www/**/*"
+  ]
+}

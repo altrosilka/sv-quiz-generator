@@ -1,0 +1,1 @@
+angular.module("app.templates", []).run(["$templateCache", function($templateCache) {$templateCache.put("sections/question/question.html"," d asd");}]);

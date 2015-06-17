@@ -1,0 +1,43 @@
+{
+  "id": "realwefwefewf",
+  "adv": {
+    "wrong": {
+      "photo": "http://s5o.ru/source/special/lawsonscup/img/WL_300_300_3_18.png",
+      "backgroundColor": "#000",
+      "color": "#4ff",
+      "link": "http://ya.ru"
+    },
+    "quizComplete": {
+      "photo": "http://avatars-fast.yandex.net/get-direct/LQpE7mF96rQG2cHKd1u8VQ/y150",
+      "backgroundColor": "#eee",
+      "color": "#333",
+      "link": "http://ya.ru"
+    }
+  },
+  "results": {
+    "photo": "http://s5o.ru/storage/simple/ru/edt/50/31/28/85/rue708ddb2721.jpg",
+    "texts": {}
+  },
+  "test": 123234234,
+  "questions": [{
+    "photo": "http://s5o.ru/storage/simple/ru/edt/41/04/54/22/ruec85de0f1bf.jpg",
+    "question": "Как дела?",
+    "answers": [{
+      "flag": true,
+      "value": "Ответ № 1"
+    }, {
+      "flag": false,
+      "value": "Ответ № 2"
+    }]
+  }, {
+    "photo": "http://s5o.ru/storage/simple/ru/edt/95/94/94/55/rue1549a3c86e.jpg",
+    "question": "Как дела 2?",
+    "answers": [{
+      "flag": false,
+      "value": "Ответ № 1"
+    }, {
+      "flag": true,
+      "value": "Ответ № 2"
+    }]
+  }]
+}

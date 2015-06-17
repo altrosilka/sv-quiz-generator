@@ -1,0 +1,34 @@
+.pane {
+  background: #111;
+}
+
+@media all and (min-width: 1025px) {
+  html {
+    height: 100%;
+    min-height: 100%;
+    overflow: auto;
+  }
+  body {
+    background: fixed url(../img/bg.jpg) center no-repeat;
+    background-size: cover;
+  }
+  .iphoneLayout {
+    width: 385px;
+    height: 687px;
+    background: url(../img/iphone.png) center no-repeat;
+    margin: 20px auto;
+    ion-nav-view {
+      overflow: hidden;
+      width: 320px;
+      height: 464px;
+      margin: 114px 0 0 40px;
+    }
+  }
+  .modal {
+    top: 20%;
+    bottom: 20%;
+    left: 50%;
+    margin-left: -250px;
+    width: 500px;
+  }
+}
