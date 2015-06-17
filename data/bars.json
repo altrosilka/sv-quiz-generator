@@ -12,32 +12,81 @@
       "backgroundColor": "#eee",
       "color": "#333",
       "link": "http://ya.ru"
+    },
+    "afterShare": {
+      "photo": "http://avatars-fast.yandex.net/get-direct/LQpE7mF96rQG2cHKd1u8VQ/y150",
+      "backgroundColor": "#eee",
+      "color": "#333",
+      "link": "http://ya.ru"
     }
   },
   "results": {
     "photo": "http://s5o.ru/storage/simple/ru/edt/50/31/28/85/rue708ddb2721.jpg",
-    "texts": {}
+    "texts": [{
+      "answers": 
+    }]
   },
-  "test": 123234234,
   "questions": [{
     "photo": "http://img.spokeo.com/public/900-600/magic_johnson_1987_04_01.jpg",
-    "question": "Как дела, барс?",
+    "question": {
+      "ru": "Вопрос на русском",
+      "en": "English text"
+    },
     "answers": [{
       "flag": true,
-      "value": "Ответ № 1"
+      "value": {
+        "ru": "Ответ на русском 1",
+        "en": "English answer 1"
+      }
     }, {
       "flag": false,
-      "value": "Ответ № 2"
+      "value": {
+        "ru": "Ответ на русском 2",
+        "en": "English answer 2"
+      }
+    },{
+      "flag": false,
+      "value": {
+        "ru": "Ответ на русском 3",
+        "en": "English answer 3"
+      }
+    },{
+      "flag": false,
+      "value": {
+        "ru": "Ответ на русском 4",
+        "en": "English answer 4"
+      }
     }]
   }, {
     "photo": "http://thesportsfanjournal.com/wp-content/uploads/2012/04/reggie-miller-vs-michael-jordan.jpg",
-    "question": "Как дела барс 2?",
+    "question": {
+      "ru": "Вопрос на русском 2",
+      "en": "English text 2"
+    },
     "answers": [{
-      "flag": false,
-      "value": "Ответ № 1"
-    }, {
       "flag": true,
-      "value": "Ответ № 2"
+      "value": {
+        "ru": "Ответ на русском 2-1",
+        "en": "English answer 2-1"
+      }
+    }, {
+      "flag": false,
+      "value": {
+        "ru": "Ответ на русском 2-2",
+        "en": "English answer 2-2"
+      }
+    },{
+      "flag": false,
+      "value": {
+        "ru": "Ответ на русском 2-3",
+        "en": "English answer 2-3"
+      }
+    },{
+      "flag": false,
+      "value": {
+        "ru": "Ответ на русском 2-4",
+        "en": "English answer 2-4"
+      }
     }]
   }]
 }
