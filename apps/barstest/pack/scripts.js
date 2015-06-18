@@ -11,7 +11,7 @@
     .run(bootApp);
 
   function bootApp(Quiz, $state, utilsService, advService, dataService, langService) {
-    langService.setLang(utilsService.getQueryParam('lang'));
+    langService.setLang(utilsService.getQueryParam('lang') || 'ru');
     var quizFree = utilsService.getQueryParam('fromApp');
 
     if (!quizFree && (ionic.Platform.isAndroid() || ionic.Platform.isIOS())) {
@@ -22,7 +22,7 @@
       window.history.pushState({}, "Hide");
     }
 
-    //$state.go('question', {id: 0});
+    $state.go('question', {id: 0});
   }
   bootApp.$inject = ["Quiz", "$state", "utilsService", "advService", "dataService", "langService"];
 
@@ -47,13 +47,13 @@
 (function() {
 	'use strict';
 
-	angular.module('app.components', []);
+	angular.module('app.sections', ['ionic']);
 })();
   
 (function() {
 	'use strict';
 
-	angular.module('app.sections', ['ionic']);
+	angular.module('app.components', []);
 })();
   
 (function() {
@@ -62,61 +62,6 @@
 	angular.module('app.services', []);
 })();
     
-(function() {
-	'use strict';
-
-	angular
-		.module('app.components')
-		.directive('lang', Lang);
-
-	function Lang(langService) {
-		return {
-			scope:{
-				lang: '='
-			},
-			link: function($scope, $element){
-				$element.html(langService.getLangText($scope.lang));
-			}
-		};
-	}
-	Lang.$inject = ["langService"];
-})();
-angular.module('app.components').directive('resizable', function() {
-  var resizableConfig = {
-    aspectRatio: true
-  };
-
-  return {
-    restrict: 'A',
-    link: function postLink(scope, elem) {
-      elem.resizable(resizableConfig);
-      elem.on('resizestop', function() {
-        if (scope.callback) scope.callback();
-      });
-    }
-  };
-});
-
-(function() {
-	'use strict';
-
-	angular
-		.module('app.components')
-		.filter('sprintf', sprintfFilter);
-
-	function sprintfFilter() {
-		function parse(str) {
-			var args = arguments, i = 1;
-			return str.replace(/%s/g, function () {
-				return args[i++] || '';
-			});
-		}
-
-		return function () {
-			return parse.apply(this, arguments);
-		};
-	}
-})();
 (function() {
   'use strict';
 
@@ -401,6 +346,61 @@ angular.module('app.sections')
 
 
 
+(function() {
+	'use strict';
+
+	angular
+		.module('app.components')
+		.directive('lang', Lang);
+
+	function Lang(langService) {
+		return {
+			scope:{
+				lang: '='
+			},
+			link: function($scope, $element){
+				$element.html(langService.getLangText($scope.lang));
+			}
+		};
+	}
+	Lang.$inject = ["langService"];
+})();
+angular.module('app.components').directive('resizable', function() {
+  var resizableConfig = {
+    aspectRatio: true
+  };
+
+  return {
+    restrict: 'A',
+    link: function postLink(scope, elem) {
+      elem.resizable(resizableConfig);
+      elem.on('resizestop', function() {
+        if (scope.callback) scope.callback();
+      });
+    }
+  };
+});
+
+(function() {
+	'use strict';
+
+	angular
+		.module('app.components')
+		.filter('sprintf', sprintfFilter);
+
+	function sprintfFilter() {
+		function parse(str) {
+			var args = arguments, i = 1;
+			return str.replace(/%s/g, function () {
+				return args[i++] || '';
+			});
+		}
+
+		return function () {
+			return parse.apply(this, arguments);
+		};
+	}
+})();
 (function() {
   'use strict';
 

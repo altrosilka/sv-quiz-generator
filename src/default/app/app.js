@@ -11,7 +11,7 @@
     .run(bootApp);
 
   function bootApp(Quiz, $state, utilsService, advService, dataService, langService) {
-    langService.setLang(utilsService.getQueryParam('lang'));
+    langService.setLang(utilsService.getQueryParam('lang') || 'ru');
     var quizFree = utilsService.getQueryParam('fromApp');
 
     if (!quizFree && (ionic.Platform.isAndroid() || ionic.Platform.isIOS())) {
@@ -22,7 +22,7 @@
       window.history.pushState({}, "Hide");
     }
 
-    //$state.go('question', {id: 0});
+    $state.go('question', {id: 0});
   }
 
   function configApp($ionicConfigProvider) {
