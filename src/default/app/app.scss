@@ -2,6 +2,9 @@
   background: #111;
 }
 
+body, button, input, select, textarea, .h1, .h2, .h3, .h4, .h5, .h6, h1, h2, h3, h4, h5, h6{
+  font-family: 'Ubuntu Condensed', sans-serif;
+}
 @media all and (min-width: 1025px) {
   html {
     height: 100%;
