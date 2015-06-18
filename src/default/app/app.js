@@ -2,7 +2,7 @@
   'use strict';
 
   angular
-    .module('app', [ 
+    .module('app', [
       'app.components', 'app.services', 'app.sections',
       'app.templates', 'app.config',
       'ionic'
@@ -10,12 +10,19 @@
     .config(configApp)
     .run(bootApp);
 
-  function bootApp($state, utilsService, advService, dataService) {
-    var quizName = utilsService.getQueryParam('quiz');
-    if (quizName){
+  function bootApp(Quiz, $state, utilsService, advService, dataService, langService) {
+    langService.setLang(utilsService.getQueryParam('lang'));
+    var quizFree = utilsService.getQueryParam('fromApp');
+
+    if (!quizFree && (ionic.Platform.isAndroid() || ionic.Platform.isIOS())) {
       advService.activate();
     }
-    $state.go('question', {id: 0});
+
+    if (typeof window.history.pushState == 'function') {
+      window.history.pushState({}, "Hide");
+    }
+
+    //$state.go('question', {id: 0});
   }
 
   function configApp($ionicConfigProvider) {

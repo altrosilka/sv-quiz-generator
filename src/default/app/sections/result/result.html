@@ -1,9 +1,21 @@
 <section class="s_result">
-  Айда молодец! Ты ответил на <span ng-bind="ctrl.rightCount"></span> из <span ng-bind="ctrl.totalCount"></span> ответов
-  <a class="button button-positive" ng-href="{{ctrl.fbShareLink}}">
-    share FB
-  </a> 
-  <a class="button button-calm" ng-href="{{ctrl.twShareLink}}">
-    share TW
-  </a>
+  <section class="image" ng-style="{'background-image': 'url('+ctrl.resultInfo.photo+')'}">
+    <span class="lang" lang="::ctrl.resultInfo.rightAnswersTxt"></span>
+    <div class="scores"><span ng-bind="ctrl.rightCount" class="userScore"></span>/<span ng-bind="ctrl.totalCount"></span></div>
+  </section>
+  <section class="cover"></section>
+  <section class="bottom-side">
+    <h2 lang="::ctrl.finalText.value.title"></h2>
+    <div class="shareText" lang="::ctrl.resultInfo.shareTxt"></div>
+    <section class="buttons">
+      <a class="button button-fb button-calm" ng-click="ctrl.onShareComplete()" target="_blank" ng-href="{{ctrl.fbShareLink}}">
+        <i class="ion-social-facebook"></i>
+        <span lang="::ctrl.shareInfo.shareFbBtnTxt"></span>
+      </a>
+      <a class="button button-tw button-calm" ng-click="ctrl.onShareComplete()" target="_blank" ng-href="{{ctrl.twShareLink}}">
+        <i class="ion-social-twitter"></i>
+        <span lang="::ctrl.shareInfo.shareTwBtnTxt"></span>
+      </a>
+    </section>
+  </section>
 </section>

@@ -1,3 +1,88 @@
-.s_results {
-  
+.s_result {
+  .image {
+    background-size: cover;
+    position: fixed;
+    z-index: 1;
+    left: 0;
+    right: 0;
+    top: 0;
+    bottom: 200px;
+    background-position: center;
+    .lang {
+      color: #FFF;
+      padding: 25px 14px 8px;
+      font-size: 16px;
+      display: block;
+    }
+    .scores {
+      padding: 14px;
+      color: #FFF;
+      font-size: 18px;
+    }
+    .userScore {
+      font-size: 40px;
+    }
+  }
+  .cover {
+    background: -moz-linear-gradient(top, rgba(0, 0, 0, 0) 0%, rgba(16, 16, 16, 1) 92%, rgba(17, 17, 17, 1) 100%);
+    background: -webkit-gradient(linear, left top, left bottom, color-stop(0%, rgba(0, 0, 0, 0)), color-stop(92%, rgba(16, 16, 16, 1)), color-stop(100%, rgba(17, 17, 17, 1)));
+    background: -webkit-linear-gradient(top, rgba(0, 0, 0, 0) 0%, rgba(16, 16, 16, 1) 92%, rgba(17, 17, 17, 1) 100%);
+    background: -o-linear-gradient(top, rgba(0, 0, 0, 0) 0%, rgba(16, 16, 16, 1) 92%, rgba(17, 17, 17, 1) 100%);
+    background: -ms-linear-gradient(top, rgba(0, 0, 0, 0) 0%, rgba(16, 16, 16, 1) 92%, rgba(17, 17, 17, 1) 100%);
+    background: linear-gradient(to bottom, rgba(0, 0, 0, 0) 0%, rgba(16, 16, 16, 1) 92%, rgba(17, 17, 17, 1) 100%);
+    pointer-events: none;
+    position: fixed;
+    left: 0;
+    right: 0;
+    bottom: 195px;
+    height: 100px;
+    z-index: 2;
+  }
+  .bottom-side {
+    z-index: 30;
+    position: fixed;
+    bottom: 0px;
+    right: 0;
+    left: 0;
+    padding: 20px;
+    h2 {
+      color: #EEE;
+      font-size: 24px;
+    }
+    .shareText {
+      font-size: 12px;
+      color: #FFF;
+      margin: 30px 0 10px;
+    }
+  }
+  .buttons {
+    font-size: 0;
+    padding-bottom: 25px;
+    .button {
+      position: relative;
+      width: 48%;
+      display: inline-block;
+      margin: 0 0 0 2%;
+      text-align: center;
+      line-height: 35px;
+      padding: 0 0 0 30px;
+      height: auto;
+      min-height: 0px;
+      i {
+        font-size: 23px;
+        position: absolute;
+        left: 11px;
+      }
+      &:first-child {
+        margin-left: 0;
+      }
+    }
+    .button-fb {
+      i {
+        top: 5px;
+        font-size: 31px;
+        left: 12px;
+      }
+    }
+  }
 }

@@ -1,13 +1,17 @@
 <section class="s_question">
-  <section class="image" ng-style="{'background-image': 'url('+ctrl.question.photo+')'}"></section>
+  <section class="image" ng-style="{'background-image': 'url('+ctrl.question.photo+')'}">
+    <div class="total" ng-bind-template="{{ctrl.currentNum}}/{{ctrl.totalCount}}">
+
+    </div>
+  </section>
   <section class="cover"></section>
   <section class="bottom-side">
-    <h2 ng-bind="::ctrl.question.question"></h2>
+    <h2 lang="::ctrl.question.question"></h2>
     <div class="answers">
       <div ng-repeat="answer in ctrl.question.answers">
         <button class="answer" ng-click="::ctrl.selectAnswer(answer)" ng-class="ctrl.getAnswerClass(answer)">
           <span class="ring"></span>
-          <span class="title" ng-bind="::answer.value"></span>
+          <span class="title" lang="::answer.value"></span>
         </button>
       </div>
     </div>

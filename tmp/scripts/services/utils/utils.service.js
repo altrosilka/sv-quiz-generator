@@ -9,12 +9,13 @@
 
     self.preloadImage = preloadImage;
     self.getQueryParam = getParameterByName;
+    self.getFinalText = getFinalText;
 
-    function preloadImage(src, cb){
+    function preloadImage(src, cb) {
       var image = new Image();
       image.src = src;
-      image.onload = function(){
-        if (typeof cb ==='function') cb(image);
+      image.onload = function() {
+        if (typeof cb === 'function') cb(image);
       }
     }
 
@@ -23,6 +24,28 @@
       var regex = new RegExp("[\\?&]" + name + "=([^&#]*)"),
         results = regex.exec(location.search);
       return results === null ? "" : decodeURIComponent(results[1].replace(/\+/g, " "));
+    }
+
+    function getFinalText(texts, rightAnswers) {
+      var old, finalText, text;
+
+      for(var i = 0; i<texts.length; i++){
+        text = texts[i];
+        
+        if (text.answers > rightAnswers){
+          finalText = old;
+          break;
+        }
+
+        if (text.answers === rightAnswers){
+          finalText = text;
+          break;
+        } else {
+          old = text;
+        }
+      };
+
+      return finalText;
     }
   }
 })();

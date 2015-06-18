@@ -17,6 +17,9 @@
       utilsService.preloadImage(ctrl.nextQuestion.photo);
     }
 
+    ctrl.currentNum = newId;
+    ctrl.totalCount = dataService.getQuiz().questions.length;
+
     ctrl.selectAnswer = selectAnswer;
     ctrl.getAnswerClass = getAnswerClass;
 
