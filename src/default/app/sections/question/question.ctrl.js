@@ -33,7 +33,7 @@
         dataService.trackRightAnswer();
         $timeout(goToNext, defaultTimeout);
       } else {
-        if (advService.isActive()) {
+        if (advService.isActive() && !advService.adsIsBlocked()) {
           $timeout(function() {
             advService.callWrongModal().then(function() {
               $timeout(goToNext, defaultTimeout);
@@ -55,7 +55,11 @@
             obj.incorrect = true
           }
         } else {
-          obj.disabled = true;
+          if (!answer.flag) {
+            obj.disabled = true;
+          } else {
+            obj.right = true;
+          }
         }
       }
       return obj;

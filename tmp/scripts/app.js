@@ -11,7 +11,7 @@
     .run(bootApp);
 
   function bootApp(Quiz, $state, utilsService, advService, dataService, langService) {
-    langService.setLang(utilsService.getQueryParam('lang') || 'ru');
+    langService.setLang(utilsService.getQueryParam('lang') || 'en');
     var quizFree = utilsService.getQueryParam('fromApp');
 
     if (!quizFree && (ionic.Platform.isAndroid() || ionic.Platform.isIOS())) {

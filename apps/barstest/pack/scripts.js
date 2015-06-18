@@ -11,7 +11,7 @@
     .run(bootApp);
 
   function bootApp(Quiz, $state, utilsService, advService, dataService, langService) {
-    langService.setLang(utilsService.getQueryParam('lang') || 'ru');
+    langService.setLang(utilsService.getQueryParam('lang') || 'en');
     var quizFree = utilsService.getQueryParam('fromApp');
 
     if (!quizFree && (ionic.Platform.isAndroid() || ionic.Platform.isIOS())) {
@@ -47,13 +47,13 @@
 (function() {
 	'use strict';
 
-	angular.module('app.sections', ['ionic']);
+	angular.module('app.components', []);
 })();
   
 (function() {
 	'use strict';
 
-	angular.module('app.components', []);
+	angular.module('app.sections', ['ionic']);
 })();
   
 (function() {
@@ -62,6 +62,61 @@
 	angular.module('app.services', []);
 })();
     
+(function() {
+	'use strict';
+
+	angular
+		.module('app.components')
+		.directive('lang', Lang);
+
+	function Lang(langService) {
+		return {
+			scope:{
+				lang: '='
+			},
+			link: function($scope, $element){
+				$element.html(langService.getLangText($scope.lang));
+			}
+		};
+	}
+	Lang.$inject = ["langService"];
+})();
+angular.module('app.components').directive('resizable', function() {
+  var resizableConfig = {
+    aspectRatio: true
+  };
+
+  return {
+    restrict: 'A',
+    link: function postLink(scope, elem) {
+      elem.resizable(resizableConfig);
+      elem.on('resizestop', function() {
+        if (scope.callback) scope.callback();
+      });
+    }
+  };
+});
+
+(function() {
+	'use strict';
+
+	angular
+		.module('app.components')
+		.filter('sprintf', sprintfFilter);
+
+	function sprintfFilter() {
+		function parse(str) {
+			var args = arguments, i = 1;
+			return str.replace(/%s/g, function () {
+				return args[i++] || '';
+			});
+		}
+
+		return function () {
+			return parse.apply(this, arguments);
+		};
+	}
+})();
 (function() {
   'use strict';
 
@@ -232,7 +287,7 @@
         dataService.trackRightAnswer();
         $timeout(goToNext, defaultTimeout);
       } else {
-        if (advService.isActive()) {
+        if (advService.isActive() && !advService.adsIsBlocked()) {
           $timeout(function() {
             advService.callWrongModal().then(function() {
               $timeout(goToNext, defaultTimeout);
@@ -254,7 +309,11 @@
             obj.incorrect = true
           }
         } else {
-          obj.disabled = true;
+          if (!answer.flag) {
+            obj.disabled = true;
+          } else {
+            obj.right = true;
+          }
         }
       }
       return obj;
@@ -347,61 +406,6 @@ angular.module('app.sections')
 
 
 (function() {
-	'use strict';
-
-	angular
-		.module('app.components')
-		.directive('lang', Lang);
-
-	function Lang(langService) {
-		return {
-			scope:{
-				lang: '='
-			},
-			link: function($scope, $element){
-				$element.html(langService.getLangText($scope.lang));
-			}
-		};
-	}
-	Lang.$inject = ["langService"];
-})();
-angular.module('app.components').directive('resizable', function() {
-  var resizableConfig = {
-    aspectRatio: true
-  };
-
-  return {
-    restrict: 'A',
-    link: function postLink(scope, elem) {
-      elem.resizable(resizableConfig);
-      elem.on('resizestop', function() {
-        if (scope.callback) scope.callback();
-      });
-    }
-  };
-});
-
-(function() {
-	'use strict';
-
-	angular
-		.module('app.components')
-		.filter('sprintf', sprintfFilter);
-
-	function sprintfFilter() {
-		function parse(str) {
-			var args = arguments, i = 1;
-			return str.replace(/%s/g, function () {
-				return args[i++] || '';
-			});
-		}
-
-		return function () {
-			return parse.apply(this, arguments);
-		};
-	}
-})();
-(function() {
   'use strict';
 
   angular.module('app.services')
@@ -413,6 +417,7 @@ angular.module('app.components').directive('resizable', function() {
     self.activate = activate;
     self.isActive = isActive;
     self.blockInQuizModal = blockInQuizModal;
+    self.adsIsBlocked = adsIsBlocked;
 
     self.afterShare = function() {
       return callModal('sections/blocks/after-s/after-s.html', Quiz.adv.afterShare);
@@ -437,6 +442,10 @@ angular.module('app.components').directive('resizable', function() {
 
     function blockInQuizModal() {
       self._blockInQuizModal = true;
+    }
+
+    function adsIsBlocked() {
+      return self._blockInQuizModal;
     }
 
     function callModal(template, source, inQuizAdv) {

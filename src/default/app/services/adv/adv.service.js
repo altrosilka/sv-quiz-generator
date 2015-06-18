@@ -10,6 +10,7 @@
     self.activate = activate;
     self.isActive = isActive;
     self.blockInQuizModal = blockInQuizModal;
+    self.adsIsBlocked = adsIsBlocked;
 
     self.afterShare = function() {
       return callModal('sections/blocks/after-s/after-s.html', Quiz.adv.afterShare);
@@ -34,6 +35,10 @@
 
     function blockInQuizModal() {
       self._blockInQuizModal = true;
+    }
+
+    function adsIsBlocked() {
+      return self._blockInQuizModal;
     }
 
     function callModal(template, source, inQuizAdv) {

@@ -53,7 +53,7 @@
         margin: 0;
         padding: 0 20px 0 25px;
         text-align: left;
-        line-height: 30px;
+        line-height: 36px;
         display: inline-block;
         .ring {
           position: absolute;
@@ -62,7 +62,7 @@
           border-radius: 50%;
           box-shadow: 0px 0px 0px 1px #FFF;
           left: 1px;
-          top: 10px;
+          top: 13px;
         }
         .title {
           font-size: 17px;
@@ -71,18 +71,27 @@
           color: #6f6;
           .ring {
             box-shadow: 0px 0px 0px 1px #6f6;
+            background-color: #6f6;
           }
         }
         &.incorrect {
           color: #f66;
           .ring {
             box-shadow: 0px 0px 0px 1px #f66;
+            background-color: #f66;
           }
         }
         &.disabled {
           color: #777;
           .ring {
             box-shadow: 0px 0px 0px 1px #777;
+          }
+        }
+        &.right {
+          color: #fff;
+          .ring {
+            box-shadow: 0px 0px 0px 1px #777;
+            background-color: #FFF;
           }
         }
       }

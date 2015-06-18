@@ -98,7 +98,7 @@
   margin: 0;
   padding: 0 20px 0 25px;
   text-align: left;
-  line-height: 30px;
+  line-height: 36px;
   display: inline-block;
 }
 .s_question .bottom-side .answers .answer .ring {
@@ -108,7 +108,7 @@
   border-radius: 50%;
   box-shadow: 0px 0px 0px 1px #FFF;
   left: 1px;
-  top: 10px;
+  top: 13px;
 }
 .s_question .bottom-side .answers .answer .title {
   font-size: 17px;
@@ -118,18 +118,27 @@
 }
 .s_question .bottom-side .answers .answer.correct .ring {
   box-shadow: 0px 0px 0px 1px #6f6;
+  background-color: #6f6;
 }
 .s_question .bottom-side .answers .answer.incorrect {
   color: #f66;
 }
 .s_question .bottom-side .answers .answer.incorrect .ring {
   box-shadow: 0px 0px 0px 1px #f66;
+  background-color: #f66;
 }
 .s_question .bottom-side .answers .answer.disabled {
   color: #777;
 }
 .s_question .bottom-side .answers .answer.disabled .ring {
   box-shadow: 0px 0px 0px 1px #777;
+}
+.s_question .bottom-side .answers .answer.right {
+  color: #fff;
+}
+.s_question .bottom-side .answers .answer.right .ring {
+  box-shadow: 0px 0px 0px 1px #777;
+  background-color: #FFF;
 }
 
 .s_result .image {
@@ -334,45 +343,6 @@
   z-index: 2;
 }
 
-.s_adv_after-share {
-  background-position: center;
-  background-repeat: no-repeat;
-  background-size: contain;
-}
-.s_adv_after-share .fake {
-  position: absolute;
-  z-index: 1;
-  left: 0;
-  right: 0;
-  top: 0;
-  bottom: 0;
-  background-position: center;
-  background-repeat: no-repeat;
-  -webkit-filter: blur(10px);
-  opacity: 0.3;
-  background-size: cover;
-}
-.s_adv_after-share .remove {
-  position: absolute;
-  font-size: 30px;
-  width: 30px;
-  height: 30px;
-  line-height: 30px;
-  right: 5px;
-  top: 5px;
-  text-align: center;
-  z-index: 3;
-}
-.s_adv_after-share a {
-  position: absolute;
-  top: 0;
-  right: 0;
-  bottom: 0;
-  left: 0;
-  display: block;
-  z-index: 2;
-}
-
 .s_adv_quiz-complete {
   background-position: center;
   background-repeat: no-repeat;
@@ -403,6 +373,45 @@
   z-index: 3;
 }
 .s_adv_quiz-complete a {
+  position: absolute;
+  top: 0;
+  right: 0;
+  bottom: 0;
+  left: 0;
+  display: block;
+  z-index: 2;
+}
+
+.s_adv_after-share {
+  background-position: center;
+  background-repeat: no-repeat;
+  background-size: contain;
+}
+.s_adv_after-share .fake {
+  position: absolute;
+  z-index: 1;
+  left: 0;
+  right: 0;
+  top: 0;
+  bottom: 0;
+  background-position: center;
+  background-repeat: no-repeat;
+  -webkit-filter: blur(10px);
+  opacity: 0.3;
+  background-size: cover;
+}
+.s_adv_after-share .remove {
+  position: absolute;
+  font-size: 30px;
+  width: 30px;
+  height: 30px;
+  line-height: 30px;
+  right: 5px;
+  top: 5px;
+  text-align: center;
+  z-index: 3;
+}
+.s_adv_after-share a {
   position: absolute;
   top: 0;
   right: 0;
