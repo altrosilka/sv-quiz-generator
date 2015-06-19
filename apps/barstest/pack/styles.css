@@ -19,6 +19,7 @@ h4,
 h5,
 h6 {
   font-family: 'Ubuntu Condensed', sans-serif;
+  text-transform: uppercase;
 }
 @media all and (min-width: 1025px) {
   html {
@@ -61,24 +62,29 @@ h6 {
   border: none;
 }
 
+.s_question {
+  display: flex;
+  justify-content: flex-start;
+  align-content: center;
+  align-items: center;
+  flex-wrap: nowrap;
+  flex-direction: column;
+}
 .s_question .image {
+  flex: 1 1 auto;
   background-size: cover;
-  position: fixed;
-  z-index: 1;
-  left: 0;
-  right: 0;
-  top: 0;
-  bottom: 200px;
   background-position: center;
+  width: 100%;
+  position: relative;
 }
 .s_question .image .total {
   position: absolute;
   top: 18px;
   left: 18px;
   color: #FFF;
-  font-size: 20px;
+  font-size: 28px;
 }
-.s_question .cover {
+.s_question .image .cover {
   background: -moz-linear-gradient(top, rgba(0, 0, 0, 0) 0%, #101010 92%, #111111 100%);
   background: -webkit-gradient(linear, left top, left bottom, color-stop(0%, rgba(0, 0, 0, 0)), color-stop(92%, #101010), color-stop(100%, #111111));
   background: -webkit-linear-gradient(top, rgba(0, 0, 0, 0) 0%, #101010 92%, #111111 100%);
@@ -86,24 +92,21 @@ h6 {
   background: -ms-linear-gradient(top, rgba(0, 0, 0, 0) 0%, #101010 92%, #111111 100%);
   background: linear-gradient(to bottom, rgba(0, 0, 0, 0) 0%, #101010 92%, #111111 100%);
   pointer-events: none;
-  position: fixed;
+  position: absolute;
   left: 0;
   right: 0;
-  bottom: 195px;
+  bottom: 0;
   height: 100px;
   z-index: 2;
 }
 .s_question .bottom-side {
   z-index: 30;
-  position: fixed;
-  bottom: 0px;
-  right: 0;
-  left: 0;
-  padding: 20px;
+  flex: 0 0 auto;
+  padding: 0 20px 20px;
 }
 .s_question .bottom-side h2 {
   color: #eee;
-  font-size: 19px;
+  font-size: 26px;
 }
 .s_question .bottom-side .answers {
   display: block;
@@ -115,22 +118,22 @@ h6 {
   border: none;
   outline: none;
   margin: 0;
-  padding: 0 20px 0 25px;
+  padding: 0 20px 0 30px;
   text-align: left;
   line-height: 36px;
   display: inline-block;
 }
 .s_question .bottom-side .answers .answer .ring {
   position: absolute;
-  width: 10px;
-  height: 10px;
+  width: 13px;
+  height: 13px;
   border-radius: 50%;
   box-shadow: 0px 0px 0px 1px #FFF;
   left: 1px;
   top: 13px;
 }
 .s_question .bottom-side .answers .answer .title {
-  font-size: 17px;
+  font-size: 22px;
 }
 .s_question .bottom-side .answers .answer.correct {
   color: #6f6;
@@ -173,16 +176,18 @@ h6 {
 .s_result .image .lang {
   color: #FFF;
   padding: 25px 14px 8px;
-  font-size: 16px;
+  font-size: 28px;
   display: block;
+  text-shadow: 0 0 5px #000;
 }
 .s_result .image .scores {
   padding: 14px;
   color: #FFF;
-  font-size: 18px;
+  font-size: 27px;
+  text-shadow: 0px 0px 4px #000;
 }
 .s_result .image .userScore {
-  font-size: 40px;
+  font-size: 57px;
 }
 .s_result .cover {
   background: -moz-linear-gradient(top, rgba(0, 0, 0, 0) 0%, #101010 92%, #111111 100%);
@@ -209,10 +214,10 @@ h6 {
 }
 .s_result .bottom-side h2 {
   color: #EEE;
-  font-size: 24px;
+  font-size: 33px;
 }
 .s_result .bottom-side .shareText {
-  font-size: 12px;
+  font-size: 15px;
   color: #FFF;
   margin: 30px 0 10px;
 }

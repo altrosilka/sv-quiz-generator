@@ -53,15 +53,15 @@
 (function() {
 	'use strict';
 
-	angular.module('app.sections', ['ionic']);
-})();
-  
-(function() {
-	'use strict';
-
 	angular.module('app.services', []);
 })();
     
+(function() {
+	'use strict';
+
+	angular.module('app.sections', ['ionic']);
+})();
+  
 (function() {
 	'use strict';
 
@@ -98,6 +98,89 @@ angular.module('app.components').directive('resizable', function() {
 });
 
 (function() {
+  'use strict';
+
+  angular.module('app.services')
+    .service('advService', AdvService);
+
+  function AdvService($rootScope, $q, $ionicModal, Quiz, $log, utilsService) {
+    var self = this;
+
+    self.activate = activate;
+    self.isActive = isActive;
+    self.blockInQuizModal = blockInQuizModal;
+    self.adsIsBlocked = adsIsBlocked;
+
+    self.afterShare = function() {
+      return callModal('sections/blocks/after-s/after-s.html', Quiz.adv.afterShare);
+    }
+    self.callWrongModal = function() {
+      return callModal('sections/blocks/wrong-answer/wrong-answer.html', Quiz.adv.wrong, true);
+    }
+
+    self.callCompleteModal = function() {
+      return callModal('sections/blocks/quiz-complete/quiz-complete.html', Quiz.adv.quizComplete, true);
+    }
+
+    function activate() {
+      self._isActive = true;
+      $log.info('Adz activated');
+      utilsService.preloadImage(Quiz.adv.wrong.photo);
+    }
+
+    function isActive() {
+      return self._isActive;
+    }
+
+    function blockInQuizModal() {
+      self._blockInQuizModal = true;
+    }
+
+    function adsIsBlocked() {
+      return self._blockInQuizModal;
+    }
+
+    function callModal(template, source, inQuizAdv) {
+      var deferred = $q.defer();
+      var $modalScope = $rootScope.$new();
+
+      if (!inQuizAdv || !self._blockInQuizModal) {
+        $ionicModal.fromTemplateUrl(template, {
+          scope: $modalScope,
+          animation: 'slide-in-up'
+        }).then(function(modal) {
+          $modalScope.modal = modal;
+          $modalScope.modal.show();
+
+          $modalScope.hide = function() {
+            deferred.resolve();
+            $modalScope.modal.hide();
+          }
+
+          $modalScope.blockAdvModals = function() {
+            self.blockInQuizModal();
+          }
+
+          var advSource = (ionic.Platform.isAndroid()) ? source.android : source.ios;
+
+          $modalScope.modalStyle = {
+            color: advSource.color || '#fff',
+            backgroundColor: advSource.backgroundColor || '#000',
+            backgroundImage: 'url(' + advSource.photo + ')'
+          };
+          $modalScope.link = advSource.link;
+        });
+      } else {
+        deferred.resolve();
+      }
+
+      return deferred.promise;
+    }
+  }
+  AdvService.$inject = ["$rootScope", "$q", "$ionicModal", "Quiz", "$log", "utilsService"];
+})();
+
+(function() {
 	'use strict';
 
 	angular
@@ -117,6 +200,197 @@ angular.module('app.components').directive('resizable', function() {
 		};
 	}
 })();
+(function() {
+  'use strict';
+
+  angular.module('app.services')
+    .service('apiService', ApiService);
+
+  function ApiService($q, requestService, apiConstant) {
+    var self = this;
+
+    self.get = function(url, params) {
+      return requestService.get(url, params);
+    };
+
+    self.getQuiz = getQuiz;
+
+    function getQuiz(id){
+      return self.get(apiConstant.baseQuizUrl + id);
+    }
+  }
+  ApiService.$inject = ["$q", "requestService", "apiConstant"];
+})();
+
+(function() {
+  'use strict';
+
+  angular.module('app.services')
+    .service('dataService', DataService);
+
+  function DataService(Quiz) {
+    var self = this;
+
+    var rightAnswers = 0;
+
+    self.getQuiz = getQuiz;
+    self.getQuestionById = getQuestionById;
+    self.trackRightAnswer = trackRightAnswer;
+    self.getRightAnswersCount = getRightAnswersCount;
+
+    function getQuiz(data) {
+      return Quiz;
+    }
+
+    function getQuestionById(id) {
+      return self.getQuiz().questions[id];
+    }
+
+    function trackRightAnswer() {
+      rightAnswers += 1;
+    }
+
+    function getRightAnswersCount() {
+      return rightAnswers;
+    }
+  }
+  DataService.$inject = ["Quiz"];
+})();
+
+
+(function() {
+  'use strict';
+
+  angular.module('app.services')
+    .service('langService', LangService);
+
+  function LangService(Quiz) {
+    var self = this;
+
+    self.setLang = setLang;
+    self.getLang = getLang;
+    self.getLangText = getLangText;
+
+    self.setLang(navigator.language || navigator.browserLanguage || navigator.userLanguage);
+
+    function setLang(lang) {
+      if (Quiz.langs[lang]) {
+        self._currentLang = lang;
+      }
+    }
+
+    function getLang() {
+      return self._currentLang;
+    }
+    function getLangText(text) {
+      if (text[self._currentLang]){
+        return text[self._currentLang];
+      } else {
+        return '--NO TEXT--';
+      }
+    }
+  }
+  LangService.$inject = ["Quiz"];
+})();
+
+(function() {
+  'use strict';
+
+  angular.module('app.services')
+    .service('requestService', RequestService);
+
+  function RequestService($q, $http, $ionicPopup) {
+    var self = this;
+
+
+    self.call = call;
+    self.post = post;
+    self.get = get;
+
+    function post(url, data, params) {
+      return self.call('POST', url, data, params);
+    }
+
+    function get(url, params) {
+      return self.call('GET', url, null, params);
+    }
+
+    function call(method, url, data, params) {
+      var deferred = $q.defer();
+      var headers = {};
+
+      $http({
+        method: method,
+        url: url,
+        headers: headers,
+        data: data,
+        params: params
+      }).then(deferred.resolve).catch(function(err) {
+        $ionicPopup.alert({
+          title: 'Ошибка получения данных',
+          template: 'Запрос на <b>'+url+'</b> не выполнен<br>query: '+JSON.stringify(params)+'<br>body: '+JSON.stringify(data)
+        });
+      });
+
+      return deferred.promise;
+    }
+  }
+  RequestService.$inject = ["$q", "$http", "$ionicPopup"];
+})();
+
+(function() {
+  'use strict';
+
+  angular.module('app.services')
+    .service('utilsService', UtilsService);
+
+  function UtilsService($http) {
+    var self = this;
+
+    self.preloadImage = preloadImage;
+    self.getQueryParam = getParameterByName;
+    self.getFinalText = getFinalText;
+
+    function preloadImage(src, cb) {
+      var image = new Image();
+      image.src = src;
+      image.onload = function() {
+        if (typeof cb === 'function') cb(image);
+      }
+    }
+
+    function getParameterByName(name) {
+      name = name.replace(/[\[]/, "\\[").replace(/[\]]/, "\\]");
+      var regex = new RegExp("[\\?&]" + name + "=([^&#]*)"),
+        results = regex.exec(location.search);
+      return results === null ? "" : decodeURIComponent(results[1].replace(/\+/g, " "));
+    }
+
+    function getFinalText(texts, rightAnswers) {
+      var old, finalText, text;
+
+      for(var i = 0; i<texts.length; i++){
+        text = texts[i];
+        
+        if (text.answers > rightAnswers){
+          finalText = old;
+          break;
+        }
+
+        if (text.answers === rightAnswers){
+          finalText = text;
+          break;
+        } else {
+          old = text;
+        }
+      };
+
+      return finalText;
+    }
+  }
+  UtilsService.$inject = ["$http"];
+})();
+
 (function() {
   'use strict';
 
@@ -404,277 +678,3 @@ angular.module('app.sections')
 
 
 
-
-(function() {
-  'use strict';
-
-  angular.module('app.services')
-    .service('advService', AdvService);
-
-  function AdvService($rootScope, $q, $ionicModal, Quiz, $log, utilsService) {
-    var self = this;
-
-    self.activate = activate;
-    self.isActive = isActive;
-    self.blockInQuizModal = blockInQuizModal;
-    self.adsIsBlocked = adsIsBlocked;
-
-    self.afterShare = function() {
-      return callModal('sections/blocks/after-s/after-s.html', Quiz.adv.afterShare);
-    }
-    self.callWrongModal = function() {
-      return callModal('sections/blocks/wrong-answer/wrong-answer.html', Quiz.adv.wrong, true);
-    }
-
-    self.callCompleteModal = function() {
-      return callModal('sections/blocks/quiz-complete/quiz-complete.html', Quiz.adv.quizComplete, true);
-    }
-
-    function activate() {
-      self._isActive = true;
-      $log.info('Adz activated');
-      utilsService.preloadImage(Quiz.adv.wrong.photo);
-    }
-
-    function isActive() {
-      return self._isActive;
-    }
-
-    function blockInQuizModal() {
-      self._blockInQuizModal = true;
-    }
-
-    function adsIsBlocked() {
-      return self._blockInQuizModal;
-    }
-
-    function callModal(template, source, inQuizAdv) {
-      var deferred = $q.defer();
-      var $modalScope = $rootScope.$new();
-
-      if (!inQuizAdv || !self._blockInQuizModal) {
-        $ionicModal.fromTemplateUrl(template, {
-          scope: $modalScope,
-          animation: 'slide-in-up'
-        }).then(function(modal) {
-          $modalScope.modal = modal;
-          $modalScope.modal.show();
-
-          $modalScope.hide = function() {
-            deferred.resolve();
-            $modalScope.modal.hide();
-          }
-
-          $modalScope.blockAdvModals = function() {
-            self.blockInQuizModal();
-          }
-
-          var advSource = (ionic.Platform.isAndroid()) ? source.android : source.ios;
-
-          $modalScope.modalStyle = {
-            color: advSource.color || '#fff',
-            backgroundColor: advSource.backgroundColor || '#000',
-            backgroundImage: 'url(' + advSource.photo + ')'
-          };
-          $modalScope.link = advSource.link;
-        });
-      } else {
-        deferred.resolve();
-      }
-
-      return deferred.promise;
-    }
-  }
-  AdvService.$inject = ["$rootScope", "$q", "$ionicModal", "Quiz", "$log", "utilsService"];
-})();
-
-(function() {
-  'use strict';
-
-  angular.module('app.services')
-    .service('apiService', ApiService);
-
-  function ApiService($q, requestService, apiConstant) {
-    var self = this;
-
-    self.get = function(url, params) {
-      return requestService.get(url, params);
-    };
-
-    self.getQuiz = getQuiz;
-
-    function getQuiz(id){
-      return self.get(apiConstant.baseQuizUrl + id);
-    }
-  }
-  ApiService.$inject = ["$q", "requestService", "apiConstant"];
-})();
-
-(function() {
-  'use strict';
-
-  angular.module('app.services')
-    .service('dataService', DataService);
-
-  function DataService(Quiz) {
-    var self = this;
-
-    var rightAnswers = 0;
-
-    self.getQuiz = getQuiz;
-    self.getQuestionById = getQuestionById;
-    self.trackRightAnswer = trackRightAnswer;
-    self.getRightAnswersCount = getRightAnswersCount;
-
-    function getQuiz(data) {
-      return Quiz;
-    }
-
-    function getQuestionById(id) {
-      return self.getQuiz().questions[id];
-    }
-
-    function trackRightAnswer() {
-      rightAnswers += 1;
-    }
-
-    function getRightAnswersCount() {
-      return rightAnswers;
-    }
-  }
-  DataService.$inject = ["Quiz"];
-})();
-
-
-(function() {
-  'use strict';
-
-  angular.module('app.services')
-    .service('langService', LangService);
-
-  function LangService(Quiz) {
-    var self = this;
-
-    self.setLang = setLang;
-    self.getLang = getLang;
-    self.getLangText = getLangText;
-
-    self.setLang(navigator.language || navigator.browserLanguage || navigator.userLanguage);
-
-    function setLang(lang) {
-      if (Quiz.langs[lang]) {
-        self._currentLang = lang;
-      }
-    }
-
-    function getLang() {
-      return self._currentLang;
-    }
-    function getLangText(text) {
-      if (text[self._currentLang]){
-        return text[self._currentLang];
-      } else {
-        return '--NO TEXT--';
-      }
-    }
-  }
-  LangService.$inject = ["Quiz"];
-})();
-
-(function() {
-  'use strict';
-
-  angular.module('app.services')
-    .service('requestService', RequestService);
-
-  function RequestService($q, $http, $ionicPopup) {
-    var self = this;
-
-
-    self.call = call;
-    self.post = post;
-    self.get = get;
-
-    function post(url, data, params) {
-      return self.call('POST', url, data, params);
-    }
-
-    function get(url, params) {
-      return self.call('GET', url, null, params);
-    }
-
-    function call(method, url, data, params) {
-      var deferred = $q.defer();
-      var headers = {};
-
-      $http({
-        method: method,
-        url: url,
-        headers: headers,
-        data: data,
-        params: params
-      }).then(deferred.resolve).catch(function(err) {
-        $ionicPopup.alert({
-          title: 'Ошибка получения данных',
-          template: 'Запрос на <b>'+url+'</b> не выполнен<br>query: '+JSON.stringify(params)+'<br>body: '+JSON.stringify(data)
-        });
-      });
-
-      return deferred.promise;
-    }
-  }
-  RequestService.$inject = ["$q", "$http", "$ionicPopup"];
-})();
-
-(function() {
-  'use strict';
-
-  angular.module('app.services')
-    .service('utilsService', UtilsService);
-
-  function UtilsService($http) {
-    var self = this;
-
-    self.preloadImage = preloadImage;
-    self.getQueryParam = getParameterByName;
-    self.getFinalText = getFinalText;
-
-    function preloadImage(src, cb) {
-      var image = new Image();
-      image.src = src;
-      image.onload = function() {
-        if (typeof cb === 'function') cb(image);
-      }
-    }
-
-    function getParameterByName(name) {
-      name = name.replace(/[\[]/, "\\[").replace(/[\]]/, "\\]");
-      var regex = new RegExp("[\\?&]" + name + "=([^&#]*)"),
-        results = regex.exec(location.search);
-      return results === null ? "" : decodeURIComponent(results[1].replace(/\+/g, " "));
-    }
-
-    function getFinalText(texts, rightAnswers) {
-      var old, finalText, text;
-
-      for(var i = 0; i<texts.length; i++){
-        text = texts[i];
-        
-        if (text.answers > rightAnswers){
-          finalText = old;
-          break;
-        }
-
-        if (text.answers === rightAnswers){
-          finalText = text;
-          break;
-        } else {
-          old = text;
-        }
-      };
-
-      return finalText;
-    }
-  }
-  UtilsService.$inject = ["$http"];
-})();
