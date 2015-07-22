@@ -15,6 +15,8 @@ var gulp = require("gulp"),
   gulpsync = require('gulp-sync')(gulp),
   ngAnnotate = require('gulp-ng-annotate');
 
+var autoprefixer = require('gulp-autoprefixer');
+
 gulp.copy = function(src, dest) {
   return gulp.src(src, {
       base: "."
@@ -88,9 +90,9 @@ gulp.task("watch", function() {
     console.error('Please, set app id; * * --id APPID');
     process.exit();
   }
-  gulp.watch(SRC.source.js, gulpsync.sync(["merge:scripts","pack:scripts"]));
-  gulp.watch(SRC.source.scss, gulpsync.sync(["merge:styles","pack:styles"]));
-  gulp.watch(SRC.source.templates, gulpsync.sync(["merge:templates","pack:templates"]));
+  gulp.watch(SRC.source.js, gulpsync.sync(["merge:scripts", "pack:scripts"]));
+  gulp.watch(SRC.source.scss, gulpsync.sync(["merge:styles", "pack:styles"]));
+  gulp.watch(SRC.source.templates, gulpsync.sync(["merge:templates", "pack:templates"]));
 });
 
 /* MERGE */
@@ -135,6 +137,7 @@ gulp.task('pack:styles', function() {
   return gulp.src(config.tmpSource.scss + '/**/*.scss')
     .pipe(less())
     .pipe(concat(DEST.css))
+    .pipe(autoprefixer())
     .pipe(gulp.dest(SRC.packDir));
 });
 

@@ -2,7 +2,7 @@
   'use strict';
 
   angular
-    .module('app', [ 
+    .module('app', [
       'app.components', 'app.services', 'app.sections',
       'app.templates', 'app.config',
       'ionic'
@@ -10,14 +10,21 @@
     .config(configApp)
     .run(bootApp);
 
-  function bootApp($state, utilsService, advService, dataService) {
-    var quizName = utilsService.getQueryParam('quiz');
-    if (quizName){
+  function bootApp(Quiz, $state, utilsService, advService, dataService, langService) {
+    langService.setLang(utilsService.getQueryParam('lang') || 'en');
+    var quizFree = utilsService.getQueryParam('fromApp');
+
+    if (!quizFree && (ionic.Platform.isAndroid() || ionic.Platform.isIOS())) {
       advService.activate();
     }
+
+    if (typeof window.history.pushState == 'function') {
+      window.history.pushState({}, "Hide");
+    }
+
     $state.go('question', {id: 0});
   }
-  bootApp.$inject = ["$state", "utilsService", "advService", "dataService"];
+  bootApp.$inject = ["Quiz", "$state", "utilsService", "advService", "dataService", "langService"];
 
   function configApp($ionicConfigProvider) {
     $ionicConfigProvider.views.maxCache(0);
@@ -34,7 +41,7 @@
       baseQuizUrl: 'data/'
     }) 
     .constant('defaultTimeout', 1000)
-    .constant('Quiz', {"id":"realwefwefewf","adv":{"wrong":{"photo":"http://s5o.ru/source/special/lawsonscup/img/WL_300_300_3_18.png","backgroundColor":"#000","color":"#4ff","link":"http://ya.ru"},"quizComplete":{"photo":"http://avatars-fast.yandex.net/get-direct/LQpE7mF96rQG2cHKd1u8VQ/y150","backgroundColor":"#eee","color":"#333","link":"http://ya.ru"}},"results":{"photo":"http://s5o.ru/storage/simple/ru/edt/50/31/28/85/rue708ddb2721.jpg","texts":{}},"test":123234234,"questions":[{"photo":"http://s5o.ru/storage/simple/ru/edt/41/04/54/22/ruec85de0f1bf.jpg","question":"Как дела?","answers":[{"flag":true,"value":"Ответ № 1"},{"flag":false,"value":"Ответ № 2"}]},{"photo":"http://s5o.ru/storage/simple/ru/edt/95/94/94/55/rue1549a3c86e.jpg","question":"Как дела 2?","answers":[{"flag":false,"value":"Ответ № 1"},{"flag":true,"value":"Ответ № 2"}]}]}); 
+    .constant('Quiz', {"id":"realwefwefewf","adv":{"wrong":{"photo":"http://s5o.ru/source/special/lawsonscup/img/WL_300_300_3_18.png","backgroundColor":"#000","color":"#4ff","link":"http://ya.ru"},"quizComplete":{"photo":"http://avatars-fast.yandex.net/get-direct/LQpE7mF96rQG2cHKd1u8VQ/y150","backgroundColor":"#eee","color":"#333","link":"http://ya.ru"},"afterShare":{"photo":"http://avatars-fast.yandex.net/get-direct/LQpE7mF96rQG2cHKd1u8VQ/y150","backgroundColor":"#eee","color":"#333","link":"http://ya.ru"}},"results":{"photo":"http://s5o.ru/storage/simple/ru/edt/50/31/28/85/rue708ddb2721.jpg","shareTxt":{"ru":"","en":""},"rightAnswersTxt":{"ru":"","en":""},"texts":[{"answers":0,"value":{"ru":"Парень, ты ни о чем","en":""}},{"answers":3,"value":{"ru":"Ну хотя бы так","en":""}}]},"questions":[{"photo":"http://img.spokeo.com/public/900-600/magic_johnson_1987_04_01.jpg","question":{"ru":"Вопрос на русском","en":"English text"},"answers":[{"flag":true,"value":{"ru":"Ответ на русском 1","en":"English answer 1"}},{"flag":false,"value":{"ru":"Ответ на русском 2","en":"English answer 2"}},{"flag":false,"value":{"ru":"Ответ на русском 3","en":"English answer 3"}},{"flag":false,"value":{"ru":"Ответ на русском 4","en":"English answer 4"}}]},{"photo":"http://thesportsfanjournal.com/wp-content/uploads/2012/04/reggie-miller-vs-michael-jordan.jpg","question":{"ru":"Вопрос на русском 2","en":"English text 2"},"answers":[{"flag":true,"value":{"ru":"Ответ на русском 2-1","en":"English answer 2-1"}},{"flag":false,"value":{"ru":"Ответ на русском 2-2","en":"English answer 2-2"}},{"flag":false,"value":{"ru":"Ответ на русском 2-3","en":"English answer 2-3"}},{"flag":false,"value":{"ru":"Ответ на русском 2-4","en":"English answer 2-4"}}]}]}); 
 })();
    
 (function() {
@@ -55,6 +62,25 @@
 	angular.module('app.services', []);
 })();
     
+(function() {
+	'use strict';
+
+	angular
+		.module('app.components')
+		.directive('lang', Lang);
+
+	function Lang(langService) {
+		return {
+			scope:{
+				lang: '='
+			},
+			link: function($scope, $element){
+				$element.html(langService.getLangText($scope.lang));
+			}
+		};
+	}
+	Lang.$inject = ["langService"];
+})();
 angular.module('app.components').directive('resizable', function() {
   var resizableConfig = {
     aspectRatio: true
@@ -245,6 +271,9 @@ angular.module('app.components').directive('resizable', function() {
       utilsService.preloadImage(ctrl.nextQuestion.photo);
     }
 
+    ctrl.currentNum = newId;
+    ctrl.totalCount = dataService.getQuiz().questions.length;
+
     ctrl.selectAnswer = selectAnswer;
     ctrl.getAnswerClass = getAnswerClass;
 
@@ -258,7 +287,7 @@ angular.module('app.components').directive('resizable', function() {
         dataService.trackRightAnswer();
         $timeout(goToNext, defaultTimeout);
       } else {
-        if (advService.isActive()) {
+        if (advService.isActive() && !advService.adsIsBlocked()) {
           $timeout(function() {
             advService.callWrongModal().then(function() {
               $timeout(goToNext, defaultTimeout);
@@ -280,7 +309,11 @@ angular.module('app.components').directive('resizable', function() {
             obj.incorrect = true
           }
         } else {
-          obj.disabled = true;
+          if (!answer.flag) {
+            obj.disabled = true;
+          } else {
+            obj.right = true;
+          }
         }
       }
       return obj;
@@ -326,21 +359,35 @@ angular.module('app.sections')
     .module('app.sections')
     .controller('ResultCtrl', ResultCtrl);
 
-  function ResultCtrl($scope, advService, dataService) {
+  function ResultCtrl(Quiz, $scope, advService, dataService, utilsService, langService) {
     var ctrl = this;
 
-    if (advService.isActive()){
+    var shareConfig = Quiz.share.config;
+
+    if (advService.isActive()) {
       advService.callCompleteModal();
     }
 
     ctrl.rightCount = dataService.getRightAnswersCount();
     ctrl.totalCount = dataService.getQuiz().questions.length;
 
-    var url = 'http://test.ru';
-    ctrl.twShareLink = 'https://twitter.com/intent/tweet?text=привет&url='+url;
-    ctrl.fbShareLink = 'https://www.facebook.com/sharer/sharer.php?u='+url+'&ref=plugin&src=share_button';
+    ctrl.resultInfo = Quiz.results;
+    ctrl.shareInfo = Quiz.share;
+    ctrl.finalText = utilsService.getFinalText(Quiz.results.texts, ctrl.rightCount);
+
+    var title = langService.getLangText(ctrl.finalText.value.title);
+    var description = langService.getLangText(ctrl.finalText.value.description);
+    var pic = ctrl.shareInfo.photo;
+    var url = shareConfig.url;
+    var redirect = shareConfig.redirect_url;
+    ctrl.twShareLink = 'https://twitter.com/intent/tweet?text=' + title + ' &url=' + url;
+    ctrl.fbShareLink = 'https://www.facebook.com/dialog/feed?app_id=' + shareConfig.fb_app_id + '&display=popup&name=' + encodeURIComponent(title) + '&picture=' + pic + '&description=' + encodeURIComponent(description) + '&link=' + encodeURIComponent(url) + '&redirect_uri=' + encodeURIComponent(redirect) + '';
+
+    ctrl.onShareComplete = function() {
+      advService.afterShare();
+    }
   }
-  ResultCtrl.$inject = ["$scope", "advService", "dataService"];
+  ResultCtrl.$inject = ["Quiz", "$scope", "advService", "dataService", "utilsService", "langService"];
 })();
 
 'use strict';
@@ -369,59 +416,18 @@ angular.module('app.sections')
 
     self.activate = activate;
     self.isActive = isActive;
+    self.blockInQuizModal = blockInQuizModal;
+    self.adsIsBlocked = adsIsBlocked;
 
+    self.afterShare = function() {
+      return callModal('sections/blocks/after-s/after-s.html', Quiz.adv.afterShare);
+    }
     self.callWrongModal = function() {
-      var deferred = $q.defer();
-      var $modalScope = $rootScope.$new();
-      
-      $ionicModal.fromTemplateUrl('sections/adv/wrong-answer/wrong-answer.html', {
-        scope: $modalScope,
-        animation: 'slide-in-up'
-      }).then(function(modal) {
-        $modalScope.modal = modal;
-        $modalScope.modal.show();
-
-        $modalScope.hide = function(){
-          deferred.resolve();
-          $modalScope.modal.hide();
-        }
-
-        $modalScope.modalStyle = {
-          color: Quiz.adv.wrong.color || '#fff',
-          backgroundColor: Quiz.adv.wrong.backgroundColor || '#000',
-          backgroundImage: 'url('+Quiz.adv.wrong.photo+')'
-        };
-        $modalScope.link = Quiz.adv.wrong.link;
-      });
-
-      return deferred.promise;
+      return callModal('sections/blocks/wrong-answer/wrong-answer.html', Quiz.adv.wrong, true);
     }
 
     self.callCompleteModal = function() {
-      var deferred = $q.defer();
-      var $modalScope = $rootScope.$new();
-      
-      $ionicModal.fromTemplateUrl('sections/adv/quiz-complete/quiz-complete.html', {
-        scope: $modalScope,
-        animation: 'slide-in-up'
-      }).then(function(modal) {
-        $modalScope.modal = modal;
-        $modalScope.modal.show();
-
-        $modalScope.hide = function(){
-          deferred.resolve();
-          $modalScope.modal.hide();
-        }
-
-        $modalScope.modalStyle = {
-          color: Quiz.adv.quizComplete.color || '#fff',
-          backgroundColor: Quiz.adv.quizComplete.backgroundColor || '#000',
-          backgroundImage: 'url('+Quiz.adv.quizComplete.photo+')'
-        }; 
-        $modalScope.link = Quiz.adv.quizComplete.link;
-      });
-
-      return deferred.promise;
+      return callModal('sections/blocks/quiz-complete/quiz-complete.html', Quiz.adv.quizComplete, true);
     }
 
     function activate() {
@@ -432,6 +438,51 @@ angular.module('app.sections')
 
     function isActive() {
       return self._isActive;
+    }
+
+    function blockInQuizModal() {
+      self._blockInQuizModal = true;
+    }
+
+    function adsIsBlocked() {
+      return self._blockInQuizModal;
+    }
+
+    function callModal(template, source, inQuizAdv) {
+      var deferred = $q.defer();
+      var $modalScope = $rootScope.$new();
+
+      if (!inQuizAdv || !self._blockInQuizModal) {
+        $ionicModal.fromTemplateUrl(template, {
+          scope: $modalScope,
+          animation: 'slide-in-up'
+        }).then(function(modal) {
+          $modalScope.modal = modal;
+          $modalScope.modal.show();
+
+          $modalScope.hide = function() {
+            deferred.resolve();
+            $modalScope.modal.hide();
+          }
+
+          $modalScope.blockAdvModals = function() {
+            self.blockInQuizModal();
+          }
+
+          var advSource = (ionic.Platform.isAndroid()) ? source.android : source.ios;
+
+          $modalScope.modalStyle = {
+            color: advSource.color || '#fff',
+            backgroundColor: advSource.backgroundColor || '#000',
+            backgroundImage: 'url(' + advSource.photo + ')'
+          };
+          $modalScope.link = advSource.link;
+        });
+      } else {
+        deferred.resolve();
+      }
+
+      return deferred.promise;
     }
   }
   AdvService.$inject = ["$rootScope", "$q", "$ionicModal", "Quiz", "$log", "utilsService"];
@@ -494,6 +545,42 @@ angular.module('app.sections')
   DataService.$inject = ["Quiz"];
 })();
 
+
+(function() {
+  'use strict';
+
+  angular.module('app.services')
+    .service('langService', LangService);
+
+  function LangService(Quiz) {
+    var self = this;
+
+    self.setLang = setLang;
+    self.getLang = getLang;
+    self.getLangText = getLangText;
+
+    self.setLang(navigator.language || navigator.browserLanguage || navigator.userLanguage);
+
+    function setLang(lang) {
+      if (Quiz.langs[lang]) {
+        self._currentLang = lang;
+      }
+    }
+
+    function getLang() {
+      return self._currentLang;
+    }
+    function getLangText(text) {
+      if (text[self._currentLang]){
+        return text[self._currentLang];
+      } else {
+        return '--NO TEXT--';
+      }
+    }
+  }
+  LangService.$inject = ["Quiz"];
+})();
+
 (function() {
   'use strict';
 
@@ -550,12 +637,13 @@ angular.module('app.sections')
 
     self.preloadImage = preloadImage;
     self.getQueryParam = getParameterByName;
+    self.getFinalText = getFinalText;
 
-    function preloadImage(src, cb){
+    function preloadImage(src, cb) {
       var image = new Image();
       image.src = src;
-      image.onload = function(){
-        if (typeof cb ==='function') cb(image);
+      image.onload = function() {
+        if (typeof cb === 'function') cb(image);
       }
     }
 
@@ -564,6 +652,28 @@ angular.module('app.sections')
       var regex = new RegExp("[\\?&]" + name + "=([^&#]*)"),
         results = regex.exec(location.search);
       return results === null ? "" : decodeURIComponent(results[1].replace(/\+/g, " "));
+    }
+
+    function getFinalText(texts, rightAnswers) {
+      var old, finalText, text;
+
+      for(var i = 0; i<texts.length; i++){
+        text = texts[i];
+        
+        if (text.answers > rightAnswers){
+          finalText = old;
+          break;
+        }
+
+        if (text.answers === rightAnswers){
+          finalText = text;
+          break;
+        } else {
+          old = text;
+        }
+      };
+
+      return finalText;
     }
   }
   UtilsService.$inject = ["$http"];

@@ -4,7 +4,7 @@
   angular.module('app.services')
     .service('advService', AdvService);
 
-  function AdvService($rootScope, $q, $ionicModal, Quiz, $log, utilsService) {
+  function AdvService($rootScope, $window, $q, $ionicModal, Quiz, $log, utilsService) {
     var self = this;
 
     self.activate = activate;
@@ -62,7 +62,7 @@
             self.blockInQuizModal();
           }
 
-          var advSource = (ionic.Platform.isAndroid()) ? source.android : source.ios;
+          var advSource = ($window.platform.android) ? source.android : source.ios;
 
           $modalScope.modalStyle = {
             color: advSource.color || '#fff',

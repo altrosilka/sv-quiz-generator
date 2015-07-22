@@ -10,11 +10,25 @@
     .config(configApp)
     .run(bootApp);
 
-  function bootApp(Quiz, $state, utilsService, advService, dataService, langService) {
+  function bootApp(Quiz, $window, $state, utilsService, advService, dataService, langService) {
     langService.setLang(utilsService.getQueryParam('lang') || 'en');
     var quizFree = utilsService.getQueryParam('fromApp');
+    var platform = utilsService.getQueryParam('platform');
 
-    if (!quizFree && (ionic.Platform.isAndroid() || ionic.Platform.isIOS())) {
+
+    if (!platform){
+      $window.platform = {
+        ios: ionic.Platform.isIOS(),
+        android: ionic.Platform.isAndroid()
+      }
+    } else {
+      $window.platform = {
+        ios: platform === 'ios',
+        android: platform === 'android'
+      }
+    }
+
+    if (!quizFree && ($window.platform.android || $window.platform.ios)) {
       advService.activate();
     }
 
@@ -22,7 +36,7 @@
       window.history.pushState({}, "Hide");
     }
 
-    $state.go('question', {id: 0});
+    //$state.go('question', {id: 0});
   }
 
   function configApp($ionicConfigProvider) {
