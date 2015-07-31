@@ -36,7 +36,7 @@
       window.history.pushState({}, "Hide");
     }
 
-    //$state.go('question', {id: 0});
+    $state.go('question', {id: 0});
   }
 
   function configApp($ionicConfigProvider) {

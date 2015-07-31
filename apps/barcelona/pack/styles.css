@@ -266,45 +266,6 @@ h6 {
   left: 12px;
 }
 
-.s_adv_wrong-answer {
-  background-position: center;
-  background-repeat: no-repeat;
-  background-size: contain;
-}
-.s_adv_wrong-answer .fake {
-  position: absolute;
-  z-index: 1;
-  left: 0;
-  right: 0;
-  top: 0;
-  bottom: 0;
-  background-position: center;
-  background-repeat: no-repeat;
-  -webkit-filter: blur(10px);
-  opacity: 0.3;
-  background-size: cover;
-}
-.s_adv_wrong-answer .remove {
-  position: absolute;
-  font-size: 30px;
-  width: 30px;
-  height: 30px;
-  line-height: 30px;
-  right: 5px;
-  top: 5px;
-  text-align: center;
-  z-index: 3;
-}
-.s_adv_wrong-answer a {
-  position: absolute;
-  top: 0;
-  right: 0;
-  bottom: 0;
-  left: 0;
-  display: block;
-  z-index: 2;
-}
-
 .s_adv_quiz-complete {
   background-position: center;
   background-repeat: no-repeat;
@@ -335,84 +296,6 @@ h6 {
   z-index: 3;
 }
 .s_adv_quiz-complete a {
-  position: absolute;
-  top: 0;
-  right: 0;
-  bottom: 0;
-  left: 0;
-  display: block;
-  z-index: 2;
-}
-
-.s_adv_quiz-complete {
-  background-position: center;
-  background-repeat: no-repeat;
-  background-size: contain;
-}
-.s_adv_quiz-complete .fake {
-  position: absolute;
-  z-index: 1;
-  left: 0;
-  right: 0;
-  top: 0;
-  bottom: 0;
-  background-position: center;
-  background-repeat: no-repeat;
-  -webkit-filter: blur(10px);
-  opacity: 0.3;
-  background-size: cover;
-}
-.s_adv_quiz-complete .remove {
-  position: absolute;
-  font-size: 30px;
-  width: 30px;
-  height: 30px;
-  line-height: 30px;
-  right: 5px;
-  top: 5px;
-  text-align: center;
-  z-index: 3;
-}
-.s_adv_quiz-complete a {
-  position: absolute;
-  top: 0;
-  right: 0;
-  bottom: 0;
-  left: 0;
-  display: block;
-  z-index: 2;
-}
-
-.s_adv_after-share {
-  background-position: center;
-  background-repeat: no-repeat;
-  background-size: contain;
-}
-.s_adv_after-share .fake {
-  position: absolute;
-  z-index: 1;
-  left: 0;
-  right: 0;
-  top: 0;
-  bottom: 0;
-  background-position: center;
-  background-repeat: no-repeat;
-  -webkit-filter: blur(10px);
-  opacity: 0.3;
-  background-size: cover;
-}
-.s_adv_after-share .remove {
-  position: absolute;
-  font-size: 30px;
-  width: 30px;
-  height: 30px;
-  line-height: 30px;
-  right: 5px;
-  top: 5px;
-  text-align: center;
-  z-index: 3;
-}
-.s_adv_after-share a {
   position: absolute;
   top: 0;
   right: 0;
@@ -491,6 +374,123 @@ h6 {
   z-index: 3;
 }
 .s_adv_after-share a {
+  position: absolute;
+  top: 0;
+  right: 0;
+  bottom: 0;
+  left: 0;
+  display: block;
+  z-index: 2;
+}
+
+.s_adv_after-share {
+  background-position: center;
+  background-repeat: no-repeat;
+  background-size: contain;
+}
+.s_adv_after-share .fake {
+  position: absolute;
+  z-index: 1;
+  left: 0;
+  right: 0;
+  top: 0;
+  bottom: 0;
+  background-position: center;
+  background-repeat: no-repeat;
+  -webkit-filter: blur(10px);
+  opacity: 0.3;
+  background-size: cover;
+}
+.s_adv_after-share .remove {
+  position: absolute;
+  font-size: 30px;
+  width: 30px;
+  height: 30px;
+  line-height: 30px;
+  right: 5px;
+  top: 5px;
+  text-align: center;
+  z-index: 3;
+}
+.s_adv_after-share a {
+  position: absolute;
+  top: 0;
+  right: 0;
+  bottom: 0;
+  left: 0;
+  display: block;
+  z-index: 2;
+}
+
+.s_adv_quiz-complete {
+  background-position: center;
+  background-repeat: no-repeat;
+  background-size: contain;
+}
+.s_adv_quiz-complete .fake {
+  position: absolute;
+  z-index: 1;
+  left: 0;
+  right: 0;
+  top: 0;
+  bottom: 0;
+  background-position: center;
+  background-repeat: no-repeat;
+  -webkit-filter: blur(10px);
+  opacity: 0.3;
+  background-size: cover;
+}
+.s_adv_quiz-complete .remove {
+  position: absolute;
+  font-size: 30px;
+  width: 30px;
+  height: 30px;
+  line-height: 30px;
+  right: 5px;
+  top: 5px;
+  text-align: center;
+  z-index: 3;
+}
+.s_adv_quiz-complete a {
+  position: absolute;
+  top: 0;
+  right: 0;
+  bottom: 0;
+  left: 0;
+  display: block;
+  z-index: 2;
+}
+
+.s_adv_wrong-answer {
+  background-position: center;
+  background-repeat: no-repeat;
+  background-size: contain;
+}
+.s_adv_wrong-answer .fake {
+  position: absolute;
+  z-index: 1;
+  left: 0;
+  right: 0;
+  top: 0;
+  bottom: 0;
+  background-position: center;
+  background-repeat: no-repeat;
+  -webkit-filter: blur(10px);
+  opacity: 0.3;
+  background-size: cover;
+}
+.s_adv_wrong-answer .remove {
+  position: absolute;
+  font-size: 30px;
+  width: 30px;
+  height: 30px;
+  line-height: 30px;
+  right: 5px;
+  top: 5px;
+  text-align: center;
+  z-index: 3;
+}
+.s_adv_wrong-answer a {
   position: absolute;
   top: 0;
   right: 0;

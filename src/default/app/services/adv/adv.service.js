@@ -12,9 +12,11 @@
     self.blockInQuizModal = blockInQuizModal;
     self.adsIsBlocked = adsIsBlocked;
 
+
     self.afterShare = function() {
       return callModal('sections/blocks/after-s/after-s.html', Quiz.adv.afterShare);
     }
+
     self.callWrongModal = function() {
       return callModal('sections/blocks/wrong-answer/wrong-answer.html', Quiz.adv.wrong, true);
     }

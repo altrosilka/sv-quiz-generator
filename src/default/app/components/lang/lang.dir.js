@@ -1,3 +1,8 @@
+/*
+директива перевода
+<div lang="text"></div>
+где text - объект {"en":"Eng text", "ru": "Рус текст"}
+*/
 (function() {
 	'use strict';
 

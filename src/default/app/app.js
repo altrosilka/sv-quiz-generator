@@ -12,7 +12,11 @@
 
   function bootApp(Quiz, $window, $state, utilsService, advService, dataService, langService) {
     langService.setLang(utilsService.getQueryParam('lang') || 'en');
+    
+    // юзер пришел из приложения, с параметром fromApp
     var quizFree = utilsService.getQueryParam('fromApp');
+
+    // для эмуляции и проверки рекламы под плаформами
     var platform = utilsService.getQueryParam('platform');
 
 
@@ -28,18 +32,24 @@
       }
     }
 
+    //активируем рекламу
     if (!quizFree && ($window.platform.android || $window.platform.ios)) {
       advService.activate();
     }
 
+    // очищаем урл
     if (typeof window.history.pushState == 'function') {
       window.history.pushState({}, "Hide");
     }
 
-    //$state.go('question', {id: 0});
+    // переходим на первый вопрос
+    $state.go('question', {id: 0});
   }
 
   function configApp($ionicConfigProvider) {
     $ionicConfigProvider.views.maxCache(0);
+
+    //запрещаем возврат назад свайпом
+    $ionicConfigProvider.views.swipeBackEnabled(false);
   }
 })();
